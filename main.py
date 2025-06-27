@@ -62,7 +62,7 @@ def generate_fake_token():
         "exp": int(time.time()) + 7 * 24 * 60 * 60
     }
     SECRET_KEY = "test123"
-    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return jwt.encode(payload, SECRET_KEY, algorithm='HS384')
 
 # Initialize the bot
 bot = Client(
