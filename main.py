@@ -685,6 +685,9 @@ async def txt_handler(bot: Client, m: Message):
                         text = await resp.text()
                         url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
 
+            # Token counter init
+            video_counter = 0
+            classplus_token = generate_fake_token()
             if "acecwply" in url:
                 cmd = f'yt-dlp -o "{name}.%(ext)s" -f "bestvideo[height<={raw_text2}]+bestaudio" --hls-prefer-ffmpeg --no-keep-video --remux-video mkv --no-warning "{url}"'
 
@@ -696,9 +699,7 @@ async def txt_handler(bot: Client, m: Message):
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
-            # Token counter init
-                video_counter = 0
-                classplus_token = generate_fake_token()
+            
  
                 # Inside the for loop where links are processed
             elif "classplusapp.com/drm/" in url:
