@@ -697,10 +697,10 @@ async def txt_handler(bot: Client, m: Message):
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
             # Token counter init
-video_counter = 0
-classplus_token = generate_fake_token()
-
-# Inside the for loop where links are processed
+                video_counter = 0
+                classplus_token = generate_fake_token()
+ 
+                # Inside the for loop where links are processed
             elif "classplusapp.com/drm/" in url:
                 video_counter += 1
                 if video_counter % 98 == 0:
