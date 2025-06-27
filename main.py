@@ -39,7 +39,7 @@ import zipfile
 import shutil
 import ffmpeg
 import jwt
-from faker import 
+from faker import Faker
 
 # Auto token generator for Classplus every 98 videos
 def generate_fake_token():
