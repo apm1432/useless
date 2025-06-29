@@ -52,20 +52,15 @@ if os.path.exists(TOKEN_LIST_PATH):
         token_list = [line.strip() for line in f if line.strip()]
 
 def get_current_token():
-    global token_list, current_token, used_token_counter
-
-    if used_token_counter >= 100 or current_token is None:
-        if not token_list:
-            return None  # No token available
-        current_token = token_list.pop(0)
-        used_token_counter = 0
-        # Save updated token list
-        with open(TOKEN_LIST_PATH, "w") as f:
-            for t in token_list:
-                f.write(t + "\n")
-
-    used_token_counter += 1
+    global token_list, current_token
+    if not token_list:
+        return None
+    current_token = token_list.pop(0)
+    with open(TOKEN_LIST_PATH, "w") as f:
+        for t in token_list:
+            f.write(t + "\n")
     return current_token
+
 # ================================================================ #
 # Initialize the bot
 bot = Client(
@@ -227,6 +222,44 @@ if os.path.exists(TOKEN_LIST_PATH):
 if not os.path.exists(TOKEN_LIST_PATH):
     with open(TOKEN_LIST_PATH, "w") as f:
         pass
+
+async def try_all_tokens_with_retry(process_func, m, *args):
+    global token_list
+    original_tokens = token_list.copy()
+
+    for token in original_tokens:
+        try:
+            result = await process_func(token, *args)
+            if result:
+                return result
+        except Exception as e:
+            print(f"❌ Token failed: {token} — {e}")
+            token_list.remove(token)
+            with open(TOKEN_LIST_PATH, "w") as f:
+                for t in token_list:
+                    f.write(t + "\n")
+
+    # All tokens failed, wait for user
+    await m.reply_text("❌ All tokens failed. Send new token with `/token yourtoken` or `/stop` to cancel.")
+    while True:
+        try:
+            response: Message = await bot.listen(m.chat.id)
+            text = response.text.strip()
+            if text.startswith("/token "):
+                new_tokens = text.split(maxsplit=1)[1].split(",,")
+                token_list.extend([t.strip() for t in new_tokens if t.strip()])
+                with open(TOKEN_LIST_PATH, "w") as f:
+                    for t in token_list:
+                        f.write(t + "\n")
+                await m.reply_text("✅ Token received. Trying again...")
+                return await try_all_tokens_with_retry(process_func, m, *args)
+            elif text == "/stop":
+                await m.reply_text("🛑 Stopped as per your request.")
+                raise Exception("User stopped the process.")
+        except asyncio.TimeoutError:
+            await m.reply_text("⏰ Timeout! No valid input received. Stopping.")
+            raise Exception("No input received.")
+
 
 @bot.on_message(filters.command("token") & filters.private)
 async def add_token(client: Client, m: Message):
@@ -780,19 +813,26 @@ async def txt_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -o "{name}.%(ext)s" -f "bestvideo[height<={raw_text2}]+bestaudio" --hls-prefer-ffmpeg --no-keep-video --remux-video mkv --no-warning "{url}"'
 
             elif "https://cpvod.testbook.com/" in url:
-                url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
-                url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-                #url = 'https://dragoapi.vercel.app/classplus?link=' + url
-                mpd, keys = helper.get_mps_and_keys(url)
+                url = url.replace("https://cpvod.testbook.com/", "https://media-cdn.classplusapp.com/drm/")
+
+                async def get_keys_with_token(token, url):
+                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={token}"
+                    return await helper.get_mps_and_keys2(url)
+
+                mpd, keys = await try_all_tokens_with_retry(get_keys_with_token, m, url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
+
             elif "classplusapp.com/drm/" in url:
-               # url = f"https://key-one-gamma.vercel.app/api?url={url}&token={raw_text4}"
-                url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-                mpd, keys = helper.get_mps_and_keys2(url)
+                async def get_keys_with_token(token, url):
+                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={token}"
+                    return await helper.get_mps_and_keys2(url)
+
+                mpd, keys = await try_all_tokens_with_retry(get_keys_with_token, m, url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
+
 
             elif "tencdn.classplusapp" in url:
                 headers = {'host': 'api.classplusapp.com', 'x-access-token': f'{cptoken}', 'accept-language': 'EN', 'api-version': '18', 'app-version': '1.4.73.2', 'build-number': '35', 'connection': 'Keep-Alive', 'content-type': 'application/json', 'device-details': 'Xiaomi_Redmi 7_SDK-32', 'device-id': 'c28d3cb16bbdac01', 'region': 'IN', 'user-agent': 'Mobile-Android', 'webengage-luid': '00000187-6fe4-5d41-a530-26186858be4c', 'accept-encoding': 'gzip'}
