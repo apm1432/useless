@@ -20,7 +20,7 @@ from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
 from utils import progress_bar
-from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS
+from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT
 from aiohttp import ClientSession
 from subprocess import getstatusoutput
 from pytube import YouTube
@@ -39,7 +39,13 @@ import zipfile
 import shutil
 import ffmpeg
 
+AUTH_USERS_FILE = "auth_users.txt"
+AUTH_USERS = []
 
+# Load authorized users from file on startup
+if os.path.exists(AUTH_USERS_FILE):
+    with open(AUTH_USERS_FILE, "r") as f:
+        AUTH_USERS = [int(line.strip()) for line in f if line.strip().isdigit()]
 # ===================== TOKEN ROTATION LOGIC ===================== #
 TOKEN_LIST_PATH = "tokens.txt"
 token_list = []
@@ -119,16 +125,18 @@ image_urls = [
 async def add_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
         return await message.reply_text("You are not authorized to use this command.")
-    
+
     try:
         new_user_id = int(message.command[1])
         if new_user_id in AUTH_USERS:
             await message.reply_text("User ID is already authorized.")
         else:
             AUTH_USERS.append(new_user_id)
-            await message.reply_text(f"User ID {new_user_id} added to authorized users.")
+            with open(AUTH_USERS_FILE, "a") as f:
+                f.write(str(new_user_id) + "\n")
+            await message.reply_text(f"✅ User ID `{new_user_id}` added to authorized users.")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid user ID.")
+        await message.reply_text("❌ Please provide a valid user ID.")
 
 @bot.on_message(filters.command("users") & filters.private)
 async def list_auth_users(client: Client, message: Message):
@@ -142,16 +150,19 @@ async def list_auth_users(client: Client, message: Message):
 async def remove_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
         return await message.reply_text("You are not authorized to use this command.")
-    
+
     try:
         user_id_to_remove = int(message.command[1])
         if user_id_to_remove not in AUTH_USERS:
             await message.reply_text("User ID is not in the authorized users list.")
         else:
             AUTH_USERS.remove(user_id_to_remove)
-            await message.reply_text(f"User ID {user_id_to_remove} removed from authorized users.")
+            with open(AUTH_USERS_FILE, "w") as f:
+                for uid in AUTH_USERS:
+                    f.write(str(uid) + "\n")
+            await message.reply_text(f"❌ User ID `{user_id_to_remove}` removed from authorized users.")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid user ID.")
+        await message.reply_text("❌ Please provide a valid user ID.")
     
         
 @bot.on_message(filters.command("cookies") & filters.private)
