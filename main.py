@@ -1001,16 +1001,27 @@ async def txt_handler(bot: Client, m: Message):
                     continue  
 
                 elif 'drmcdni' in url or 'drm/wv' in url:
+                    async def get_keys_with_token(token, url):
+                        url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={token}"
+                        return await helper.get_mps_and_keys(url)
+
+                    mpd, keys = await try_all_tokens_with_retry(get_keys_with_token, m, url)
+                    url = mpd
+                    keys_string = " ".join([f"--key {key}" for key in keys])
+
                     Show = f"<i><b>Video Downloading</b></i>\n<blockquote><b>{str(count).zfill(3)}) {name1}</b></blockquote>"
                     prog = await bot.send_message(channel_id, Show, disable_web_page_preview=True)
-                    res_file = await helper.decrypt_and_merge_video(mpd, keys_string, path, name, raw_text2)
+
+                    res_file = await helper.decrypt_and_merge_video(url, keys_string, path, name, raw_text2)
                     filename = res_file
+ 
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, thumb, name, prog, channel_id)
+
                     count += 1
                     await asyncio.sleep(1)
                     continue
-     
+
                 else:
                     Show = f"<i><b>Video Downloading</b></i>\n<blockquote><b>{str(count).zfill(3)}) {name1}</b></blockquote>"
                     prog = await bot.send_message(channel_id, Show, disable_web_page_preview=True)
