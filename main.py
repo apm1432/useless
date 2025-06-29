@@ -800,10 +800,36 @@ async def txt_handler(bot: Client, m: Message):
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
-            elif "classplusapp.com/drm/" in url:
+       #     elif "classplusapp.com/drm/" in url:
                # url = f"https://key-one-gamma.vercel.app/api?url={url}&token={raw_text4}"
+        #        url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
+              #  mpd, keys = helper.get_mps_and_keys2(url)
+             #   url = mpd
+             #   keys_string = " ".join([f"--key {key}" for key in keys])
+
+            elif "classplusapp.com/drm/" in url:
                 url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-                mpd, keys = helper.get_mps_and_keys2(url)
+
+                result = helper.get_mps_and_keys2(url)
+                if result is None:
+                    await bot.send_message(channel_id, "❌ Token failed. Trying next one...")
+
+                    handle_token_failure(selected_token)
+                    selected_token = get_current_token()
+
+                    if not selected_token:
+                        await bot.send_message(channel_id, "❌ All tokens exhausted. Stopping.")
+                        break
+
+                    # Replace tokens with the new one
+                    cwtoken = selected_token
+                    cptoken = selected_token
+                    pwtoken = selected_token
+
+                    i -= 1  # retry the same link
+                    continue
+
+                mpd, keys = result
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
