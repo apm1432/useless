@@ -771,6 +771,7 @@ async def txt_handler(bot: Client, m: Message):
     count =int(raw_text)   
     arg = int(raw_text)
     try:
+        was_token_retry = False  # ✅ Declare retry flag at the start of loop
         for i in range(arg-1, len(links)):
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
             url = "https://" + Vxy
@@ -1007,6 +1008,7 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
+                    was_token_retry = True
                     i -= 1  # retry same video
                     continue
 
@@ -1020,6 +1022,8 @@ async def txt_handler(bot: Client, m: Message):
         await m.reply_text(e)
         time.sleep(2)
 
+    if was_token_retry:
+        return  # ❌ Don't show "✅ Completed" if token retry happened and stopped
     success_count = len(links) - failed_count
     video_count = v2_count + mpd_count + m3u8_count + yt_count + drm_count + zip_count + other_count
     if raw_text7 == "/d":
