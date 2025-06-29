@@ -30,18 +30,35 @@ def duration(filename):
     return float(result.stdout)
 
 def get_mps_and_keys(api_url):
-    response = requests.get(api_url)
-    response_json = response.json()
-    mpd = response_json.get('MPD')
-    keys = response_json.get('KEYS')
-    return mpd, keys
-    
+    try:
+        response = requests.get(api_url, timeout=10)
+        response_json = response.json()
+        mpd = response_json.get('MPD')
+        keys = response_json.get('KEYS')
+
+        if not mpd or not keys:
+            return None
+
+        return mpd, keys
+    except Exception as e:
+        print(f"[ERROR:get_mps_and_keys] {e}")
+        return None
+
+
 def get_mps_and_keys2(api_url):
-    response = requests.get(api_url) 
-    response_json = response.json()
-    mpd = response_json.get('mpd_url')
-    keys = response_json.get('keys')
-    return mpd, keys
+    try:
+        response = requests.get(api_url, timeout=10)
+        response_json = response.json()
+        mpd = response_json.get('mpd_url')
+        keys = response_json.get('keys')
+
+        if not mpd or not keys:
+            return None
+
+        return mpd, keys
+    except Exception as e:
+        print(f"[ERROR:get_mps_and_keys2] {e}")
+        return None
     
 def exec(cmd):
         process = subprocess.run(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
