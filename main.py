@@ -64,16 +64,18 @@ def handle_token_failure(failed_token):
 def get_current_token():
     global token_list, current_token
 
-    if current_token is None:
-        if not token_list:
-            return None  # No token available
-        current_token = token_list.pop(0)
-        # Save updated token list
-        with open(TOKEN_LIST_PATH, "w") as f:
-            for t in token_list:
-                f.write(t + "\n")
+    if not token_list:
+        return None  # No token left
+
+    current_token = token_list.pop(0)
+
+    # Save updated token list
+    with open(TOKEN_LIST_PATH, "w") as f:
+        for t in token_list:
+            f.write(t + "\n")
 
     return current_token
+
 
 # ================================================================ #
 # Initialize the bot
