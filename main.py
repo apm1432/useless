@@ -816,7 +816,7 @@ async def txt_handler(bot: Client, m: Message):
                 url = url.replace("https://cpvod.testbook.com/", "https://media-cdn.classplusapp.com/drm/")
 
                 async def get_keys_with_token(token, url):
-                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={token}"
+                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
                     return await helper.get_mps_and_keys2(url)
 
                 mpd, keys = await try_all_tokens_with_retry(get_keys_with_token, m, url)
@@ -826,7 +826,7 @@ async def txt_handler(bot: Client, m: Message):
 
             elif "classplusapp.com/drm/" in url:
                 async def get_keys_with_token(token, url):
-                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={token}"
+                    url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
                     return await helper.get_mps_and_keys2(url)
 
                 mpd, keys = await try_all_tokens_with_retry(get_keys_with_token, m, url)
