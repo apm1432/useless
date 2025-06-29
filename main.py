@@ -249,7 +249,7 @@ async def add_token(client: Client, m: Message):
 
     if len(m.text.split()) < 2:
         await m.reply_text(
-            "❌ Please provide token(s) like:\n`/token token1,, token2,, token3`"
+            "❌ Please provide token(s) like:\n`/token token1 token2 token3`"
         )
         return
 
@@ -257,7 +257,7 @@ async def add_token(client: Client, m: Message):
     tokens_input = m.text.split(maxsplit=1)[1].strip()
     
     # Split by double comma with optional spaces
-    tokens = [token.strip() for token in tokens_input.split(",,") if token.strip()]
+    tokens = [token.strip() for token in tokens_input.split(" ") if token.strip()]
     
     if not tokens:
         await m.reply_text("❌ No valid tokens found after splitting!")
@@ -304,6 +304,17 @@ async def delete_all_tokens(client: Client, message: Message):
     if os.path.exists(TOKEN_LIST_PATH):
         os.remove(TOKEN_LIST_PATH)
     await message.reply_text("🗑️ All saved tokens have been deleted.")
+
+@bot.on_message(filters.command("avtoken"))
+async def avtoken_handler(_, message):
+    try:
+        with open("tokens.txt", "r") as f:
+            tokens = f.read().strip().split(" ")  # 👈 Use double comma as splitter
+            count = len([t for t in tokens if t.strip() != ""])
+
+        await message.reply_text(f"🔐 Available Tokens: **{count}**")
+    except Exception as e:
+        await message.reply_text(f"❌ Error reading tokens:\n{str(e)}")
 
 # ======================================
 
@@ -546,7 +557,7 @@ async def txt_handler(client: Client, m: Message):
         f"➥ /id – Get Chat/User ID\n"  
         f"➥ /info – User Details\n"  
         f"➥ /logs – View Bot Activity\n"
-        f"➥ /upgrade – subscription Activity\n"
+        f"➥ /upgrade ,/avtoken, /token– subscription Activity\n"
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
         f"👤 𝐔𝐬𝐞𝐫 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧: **(OWNER)**\n\n" 
         f"➥ /addauth xxxx – Add User ID\n" 
