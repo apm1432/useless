@@ -320,12 +320,13 @@ async def delete_all_tokens(client: Client, message: Message):
 async def avtoken_handler(_, message):
     try:
         with open("tokens.txt", "r") as f:
-            tokens = f.read().strip().split(" ")  # 👈 Use double comma as splitter
-            count = len([t for t in tokens if t.strip() != ""])
+            tokens = [line.strip() for line in f if line.strip()]
+            count = len(tokens)
 
         await message.reply_text(f"🔐 Available Tokens: **{count}**")
     except Exception as e:
         await message.reply_text(f"❌ Error reading tokens:\n{str(e)}")
+
 
 # ======================================
 
@@ -466,7 +467,7 @@ async def start(bot, m: Message):
     await start_message.edit_text(
         f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
         f"Checking subscription status... 🔍\n\n"
-        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 100%\n\n"
+        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%\n\n"
     )
 
     await asyncio.sleep(1)
@@ -498,7 +499,7 @@ async def start(bot, m: Message):
            f"• 🎓 All Non DRM+AES Encrypted URLs\n"
            f"• 🎓 MPD URLs if the key is known (e.g., Mpd_url?key=key XX:XX)</blockquote>\n\n"
            f"🚀 You are not subscribed to any plan yet!\n\n"
-           f"<blockquote>💵 Monthly Plan: free</blockquote>\n\n"
+           f"<blockquote>💵 Monthly Plan: 800</blockquote>\n\n"
            f"If you want to buy membership of the bot, feel free to contact the Bot Admin.\n", disable_web_page_preview=True, reply_markup=keyboard
     )
 
@@ -849,7 +850,7 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= -1  # retry the same link
+                    i -= 2  # retry the previous link
                     continue
 
                 mpd, keys = result
