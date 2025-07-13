@@ -1680,22 +1680,7 @@ async def text_handler(bot: Client, m: Message):
     await editable.delete()
 
    
-        
-    failed_count = 0
-    count =int(raw_text)   
-    arg = int(raw_text)
-    try:
-        was_token_retry = False  # ✅ Declare retry flag at the start of loop
-        for i in range(arg-1, len(links)):
-            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
-            url = "https://" + Vxy
-            link0 = "https://" + Vxy
-
-            name1 = links[i][0].replace("(", "[").replace(")", "]").replace("_", "").replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
-            if "," in raw_text3:
-                 name = f'{PRENAME} {name1[:60]}'
-            else:
-                 name = f'{name1[:60]}'
+ 
             
             if "visionias" in url:
                 async with ClientSession() as session:
@@ -1741,7 +1726,7 @@ async def text_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 2  # retry the previous link
+                    i -= 1  # retry the previous link
                     continue
 
                 mpd, keys = result
