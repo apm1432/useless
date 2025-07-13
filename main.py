@@ -1610,7 +1610,7 @@ async def text_handler(bot: Client, m: Message):
             res = "UN"
           
    
-    raw_text4 = "working_token"
+    raw_text4 = "cptoken"
     thumb = "/d"
     count =0
     arg =1
