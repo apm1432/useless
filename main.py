@@ -466,7 +466,7 @@ async def start(bot, m: Message):
     await start_message.edit_text(
         f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
         f"Checking subscription status... 🔍\n\n"
-        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%\n\n"
+        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 100%\n\n"
     )
 
     await asyncio.sleep(1)
@@ -600,7 +600,7 @@ async def txt_handler(bot: Client, m: Message):
             print(f"User ID not in AUTH_USERS", m.chat.id)
             await bot.send_message(m.chat.id, f"<blockquote>__**Oopss! You are not a Premium member\nPLEASE /upgrade YOUR PLAN\nSend me your user id for authorization\nYour User id**__ - `{m.chat.id}`</blockquote>\n")
             return
-    editable = await m.reply_text(f"**__Hii, I am non-drm Downloader Bot__\n<blockquote><i>Send Me Your text file which enclude Name with url...\nE.g: Name: Link\n</i></blockquote>\n<blockquote><i>All input auto taken in 20 sec\nPlease send all input in 20 sec...\n</i></blockquote>**")
+    editable = await m.reply_text(f"**__Hii, I am drm Downloader Bot__\n<blockquote><i>Send Me Your text file which enclude Name with url...\nE.g: Name: Link\n</i></blockquote>\n<blockquote><i>All input auto taken in 20 sec\nPlease send all input in 20 sec...\n</i></blockquote>**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
     await bot.send_document(OWNER, x)
@@ -816,8 +816,8 @@ async def txt_handler(bot: Client, m: Message):
 
             elif "https://cpvod.testbook.com/" in url:
                 url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
-                url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-                #url = 'https://dragoapi.vercel.app/classplus?link=' + url
+                #url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
+                url = f"https://scammer-keys.vercel.app/api?url={url}&token={cptoken}&auth=@scammer_botxz1"
                 mpd, keys = helper.get_mps_and_keys(url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
@@ -830,7 +830,8 @@ async def txt_handler(bot: Client, m: Message):
              #   keys_string = " ".join([f"--key {key}" for key in keys])
 
             elif "classplusapp.com/drm/" in url:
-                url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
+                # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
+                url = f"https://scammer-keys.vercel.app/api?url={url}&token={cptoken}&auth=@scammer_botxz1"
 
                 result = helper.get_mps_and_keys2(url)
                 if result is None:
@@ -848,7 +849,7 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 1  # retry the same link
+                    i -= -1  # retry the same link
                     continue
 
                 mpd, keys = result
