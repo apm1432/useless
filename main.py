@@ -1609,7 +1609,11 @@ async def text_handler(bot: Client, m: Message):
             res = "UN"
           
    
-    raw_text4 = "working_token"
+    raw_text4 = get_current_token()
+    if not raw_text4:
+        await m.reply_text("❌ No saved tokens available. Use /token to add some.")
+        return
+
     thumb = "/d"
     count =0
     arg =1
