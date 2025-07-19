@@ -1624,8 +1624,9 @@ async def text_handler(bot: Client, m: Message):
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
             elif "classplusapp.com/drm/" in url:
-                url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={raw_text4}"
-                result = helper.get_mps_and_keys2(url)
+               # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={raw_text4}"
+                url = f"https://scammer-keys.vercel.app/api?url={url}&token={raw_text4}&auth=@scammer_botxz1"
+                result = helper.get_mps_and_keys(url)
                 if result is None:
                     await m.reply_text("❌ Token failed. Provide a new one using /token")
                     return
