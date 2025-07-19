@@ -260,7 +260,7 @@ async def add_token(client: Client, m: Message):
 
     if len(m.text.split()) < 2:
         await m.reply_text(
-            "❌ Please provide token(s) like:\n`/token token1 token2 token3`"
+            "❌ Please provide token(s) like:\n`/token token1,token2,token3`"
         )
         return
 
@@ -268,7 +268,7 @@ async def add_token(client: Client, m: Message):
     tokens_input = m.text.split(maxsplit=1)[1].strip()
     
     # Split by double comma with optional spaces
-    tokens = [token.strip() for token in tokens_input.split(" ") if token.strip()]
+    tokens = [token.strip() for token in tokens_input.split(",") if token.strip()]
     
     if not tokens:
         await m.reply_text("❌ No valid tokens found after splitting!")
