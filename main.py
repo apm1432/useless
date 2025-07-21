@@ -795,7 +795,8 @@ async def txt_handler(bot: Client, m: Message):
     arg = int(raw_text)
     try:
         was_token_retry = False  # ✅ Declare retry flag at the start of loop
-        for i in range(arg-1, len(links)):
+        i = arg - 1
+        while i < len(links):
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
             url = "https://" + Vxy
             link0 = "https://" + Vxy
@@ -843,8 +844,9 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 1  # retry same link
-                    continue
+                    was_token_retry = True  # flag set so we skip "✅ Completed" at end if stopped
+                    continue                # retry same link
+
 
                 mpd, keys = result
                 url = mpd
@@ -1052,7 +1054,6 @@ async def txt_handler(bot: Client, m: Message):
                     pwtoken = selected_token
 
                     was_token_retry = True
-                    i -= 1  # retry same video
                     continue
 
                 await bot.send_message(channel_id, f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {url}\n\n<blockquote><i><b>Failed Reason: {str(e)}</b></i></blockquote>', disable_web_page_preview=True)
