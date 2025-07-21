@@ -791,11 +791,14 @@ async def txt_handler(bot: Client, m: Message):
 
         
     failed_count = 0
-    count =int(raw_text)   
+    count = int(raw_text)
     arg = int(raw_text)
-    try:
-        was_token_retry = False  # ✅ Declare retry flag at the start of loop
-        for i in range(arg-1, len(links)):
+    i = arg - 1
+    was_token_retry = False
+
+    while i < len(links):
+        try:
+
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
             url = "https://" + Vxy
             link0 = "https://" + Vxy
@@ -823,13 +826,7 @@ async def txt_handler(bot: Client, m: Message):
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
-       #     elif "classplusapp.com/drm/" in url:
-               # url = f"https://key-one-gamma.vercel.app/api?url={url}&token={raw_text4}"
-        #        url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-              #  mpd, keys = helper.get_mps_and_keys2(url)
-             #   url = mpd
-             #   keys_string = " ".join([f"--key {key}" for key in keys])
-
+     
             elif "classplusapp.com/drm/" in url:
                 # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
                 url = f"https://scammer-keys.vercel.app/api?url={url}&token={cptoken}&auth=@scammer_botxz1"
@@ -850,7 +847,7 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 2  # retry the previous link
+                  #  i -= 2  # retry the previous link
                     continue
 
                 mpd, keys = result
