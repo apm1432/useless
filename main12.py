@@ -847,7 +847,7 @@ async def txt_handler(bot: Client, m: Message):
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                  #  i -= 2  # retry the previous link
+                  #  i -= 1  # retry 
                     continue
 
                 mpd, keys = result
@@ -1066,8 +1066,12 @@ async def txt_handler(bot: Client, m: Message):
 
 
     except Exception as e:
-        await m.reply_text(e)
+        await m.reply_text(str(e))
         time.sleep(2)
+        failed_count += 1
+        count += 1
+        i += 1
+
 
     if was_token_retry:
         return  # ❌ Don't show "✅ Completed" if token retry happened and stopped
