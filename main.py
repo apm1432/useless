@@ -1037,6 +1037,7 @@ async def txt_handler(bot: Client, m: Message):
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, thumb, name, prog, channel_id)
                     count += 1
+                    i += 1
                     time.sleep(1)
                 
             except Exception as e:
