@@ -913,6 +913,7 @@ async def txt_handler(bot: Client, m: Message):
                         ka = await helper.download(url, name)
                         copy = await bot.send_document(chat_id=channel_id,document=ka, caption=cc1)
                         count+=1
+                        i += 1  # ✅ ADD THIS LINE
                         os.remove(ka)
                     except FloodWait as e:
                         await m.reply_text(str(e))
@@ -939,6 +940,7 @@ async def txt_handler(bot: Client, m: Message):
                                     await asyncio.sleep(retry_delay)  # Optional, to prevent spamming
                                     copy = await bot.send_document(chat_id=channel_id, document=f'{name}.pdf', caption=cc1)
                                     count += 1
+                                    i += 1  # ✅ ADD THIS LINE
                                     os.remove(f'{name}.pdf')
                                     success = True
                                     break  # Exit the retry loop if successful
@@ -961,6 +963,7 @@ async def txt_handler(bot: Client, m: Message):
                             os.system(download_cmd)
                             copy = await bot.send_document(chat_id=channel_id, document=f'{name}.pdf', caption=cc1)
                             count += 1
+                            i += 1  # ✅ ADD THIS LINE
                             os.remove(f'{name}.pdf')
                         except FloodWait as e:
                             await m.reply_text(str(e))
@@ -974,6 +977,7 @@ async def txt_handler(bot: Client, m: Message):
                         await bot.send_document(chat_id=channel_id, document=f"{name}.html", caption=cchtml)
                         os.remove(f'{name}.html')
                         count += 1
+                        i += 1  # ✅ ADD THIS LINE
                     except FloodWait as e:
                         await m.reply_text(str(e))
                         time.sleep(e.x)
@@ -987,6 +991,7 @@ async def txt_handler(bot: Client, m: Message):
                         os.system(download_cmd)
                         copy = await bot.send_photo(chat_id=channel_id, photo=f'{name}.{ext}', caption=ccimg)
                         count += 1
+                        i += 1  # ✅ ADD THIS LINE
                         os.remove(f'{name}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
@@ -1001,6 +1006,7 @@ async def txt_handler(bot: Client, m: Message):
                         os.system(download_cmd)
                         copy = await bot.send_document(chat_id=channel_id, document=f'{name}.{ext}', caption=ccm)
                         count += 1
+                        i += 1  # ✅ ADD THIS LINE
                         os.remove(f'{name}.{ext}')
                     except FloodWait as e:
                         await m.reply_text(str(e))
@@ -1015,6 +1021,7 @@ async def txt_handler(bot: Client, m: Message):
                     await prog.delete(True)  
                     await helper.send_vid(bot, m, cc, filename, thumb, name, prog, channel_id)
                     count += 1  
+                    i += 1  # ✅ ADD THIS LINE
                     await asyncio.sleep(1)  
                     continue  
 
@@ -1026,6 +1033,7 @@ async def txt_handler(bot: Client, m: Message):
                     await prog.delete(True)
                     await helper.send_vid(bot, m, cc, filename, thumb, name, prog, channel_id)
                     count += 1
+                    i += 1  # ✅ ADD THIS LINE
                     await asyncio.sleep(1)
                     continue
      
