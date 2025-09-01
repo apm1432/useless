@@ -30,22 +30,13 @@ def duration(filename):
     return float(result.stdout)
 
 def get_mps_and_keys(api_url):
-    try:
-        response = requests.get(api_url, timeout=10)
-        response_json = response.json()
-        mpd = response_json.get('MPD')
-        keys = response_json.get('KEYS')
+    response = requests.get(api_url)
+    response_json = response.json()
+    mpd = response_json.get('MPD')
+    keys = response_json.get('KEYS')
+    return mpd, keys
 
-        if not mpd or not keys:
-            return None
-
-        return mpd, keys
-    except Exception as e:
-        print(f"[ERROR:get_mps_and_keys] {e}")
-        return None
-
-
-def get_mps_and_keys2(api_url):
+def get_mps_and_keys1(api_url):
     try:
         response = requests.get(api_url, timeout=10)
         response_json = response.json()
@@ -57,9 +48,9 @@ def get_mps_and_keys2(api_url):
 
         return mpd, keys
     except Exception as e:
-        print(f"[ERROR:get_mps_and_keys2] {e}")
+        print(f"[ERROR:get_mps_and_keys1] {e}")
         return None
-    
+   
 def exec(cmd):
         process = subprocess.run(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         output = process.stdout.decode()
@@ -316,7 +307,7 @@ async def download_and_decrypt_video(url, cmd, name, key):
             print(f"Failed to decrypt {video_path}.")  
             return None  
 
-async def send_vid(bot: Client, m: Message, cc, filename, thumb, name, prog, channel_id):
+async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, thumb, name, prog, channel_id):
     subprocess.run(f'ffmpeg -i "{filename}" -ss 00:00:10 -vframes 1 "{filename}.jpg"', shell=True)
     await prog.delete (True)
     reply1 = await bot.send_message(channel_id, f"**📩 Uploading Video 📩:-**\n<blockquote>**{name}**</blockquote>")
@@ -325,19 +316,29 @@ async def send_vid(bot: Client, m: Message, cc, filename, thumb, name, prog, cha
         if thumb == "/d":
             thumbnail = f"{filename}.jpg"
         else:
-            thumbnail = thumb
+            thumbnail = thumb  
+        
+        if vidwatermark == "/d":
+            w_filename = f"{filename}"
+        else:
+            w_filename = f"w_{filename}"
+            font_path = "vidwater.ttf"
+            subprocess.run(
+                f'ffmpeg -i "{filename}" -vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\':fontcolor=white@0.3:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2" -codec:a copy "{w_filename}"',
+                shell=True
+            )
             
     except Exception as e:
         await m.reply_text(str(e))
-      
-    dur = int(duration(filename))
+
+    dur = int(duration(w_filename))
     start_time = time.time()
 
     try:
-        await bot.send_video(channel_id, filename, caption=cc, supports_streaming=True, height=720, width=1280, thumb=thumbnail, duration=dur, progress=progress_bar, progress_args=(reply, start_time))
+        await bot.send_video(channel_id, w_filename, caption=cc, supports_streaming=True, height=720, width=1280, thumb=thumbnail, duration=dur, progress=progress_bar, progress_args=(reply, start_time))
     except Exception:
-        await bot.send_document(channel_id, filename, caption=cc, progress=progress_bar, progress_args=(reply, start_time))
-    os.remove(filename)
+        await bot.send_document(channel_id, w_filename, caption=cc, progress=progress_bar, progress_args=(reply, start_time))
+    os.remove(w_filename)
     await reply.delete(True)
     await reply1.delete(True)
     os.remove(f"{filename}.jpg")
