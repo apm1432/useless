@@ -829,7 +829,7 @@ async def txt_handler(bot: Client, m: Message):
                 # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
                 url = f"https://drmjion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
 
-                result = helper.get_mps_and_keys2(url)
+                result = helper.get_mps_and_keys1(url)
                 if result is None:
                     await bot.send_message(channel_id, "❌ Token failed. Trying next one...")
 
