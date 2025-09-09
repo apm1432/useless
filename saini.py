@@ -45,7 +45,7 @@ def get_mps_and_keys(api_url):
         return None
 
 
-def get_mps_and_keys2(api_url):
+def get_mps_and_keys1(api_url):
     try:
         response = requests.get(api_url, timeout=10)
         response_json = response.json()
@@ -57,7 +57,7 @@ def get_mps_and_keys2(api_url):
 
         return mpd, keys
     except Exception as e:
-        print(f"[ERROR:get_mps_and_keys2] {e}")
+        print(f"[ERROR:get_mps_and_keys1] {e}")
         return None
     
 def exec(cmd):
