@@ -823,18 +823,13 @@ async def txt_handler(bot: Client, m: Message):
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
-       #     elif "classplusapp.com/drm/" in url:
-               # url = f"https://key-one-gamma.vercel.app/api?url={url}&token={raw_text4}"
-        #        url = fhttps://drmjion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-              #  mpd, keys = helper.get_mps_and_keys2(url)
-             #   url = mpd
-             #   keys_string = " ".join([f"--key {key}" for key in keys])
+     
 
             elif "classplusapp.com/drm/" in url:
                 # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
                 url = f"https://drmjion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
 
-                result = helper.get_mps_and_keys(url)
+                result = helper.get_mps_and_keys2(url)
                 if result is None:
                     await bot.send_message(channel_id, "❌ Token failed. Trying next one...")
 
@@ -1310,15 +1305,9 @@ async def txt_handler(bot: Client, m: Message):
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
-       #     elif "classplusapp.com/drm/" in url:
-               # url = f"https://key-one-gamma.vercel.app/api?url={url}&token={raw_text4}"
-        #        url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-              #  mpd, keys = helper.get_mps_and_keys2(url)
-             #   url = mpd
-             #   keys_string = " ".join([f"--key {key}" for key in keys])
-
+    
             elif "classplusapp.com/drm/" in url:
-                url = f"https://cpapi-ytas.onrender.com/extract_keys?url={url}@bots_updatee&user_id={user_id}"
+                url = f"https://covercel.vercel.app/extract_keys?url={url}@bots_updatee&user_id={user_id}"
               #  url = f"https://scammer-keys.vercel.app/api?url={url}&token={cptoken}&auth=@scammer_botxz1"
 
                 result = helper.get_mps_and_keys2(url)
