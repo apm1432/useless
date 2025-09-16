@@ -449,35 +449,6 @@ async def start(bot, m: Message):
         f"Progress: [⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 0%\n\n"
     )
 
-    await asyncio.sleep(1)
-    await start_message.edit_text(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
-        f"Loading features... ⏳\n\n"
-        f"Progress: [🟥🟥🟥⬜️⬜️⬜️⬜️⬜️⬜️⬜️] 25%\n\n"
-    )
-    
-    await asyncio.sleep(1)
-    await start_message.edit_text(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
-        f"This may take a moment, sit back and relax! 😊\n\n"
-        f"Progress: [🟧🟧🟧🟧🟧⬜️⬜️⬜️⬜️⬜️] 50%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await start_message.edit_text(
-        f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
-        f"Checking subscription status... 🔍\n\n"
-        f"Progress: [🟨🟨🟨🟨🟨🟨🟨🟨⬜️⬜️] 75%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await start_message.edit_text(
-       f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
-       f"Great! expxplore things!\n"
-       f"Use Command : /help to get started 🌟\n\n"
-       f"If you face any problem contact -  [PATIL](https://t.me/Driven_soulbot)\n", disable_web_page_preview=True, reply_markup=BUTTONSCONTACT
-    )
-    
     await asyncio.sleep(2)
     await start_message.edit_text(
         f" 🎉 Welcome {m.from_user.first_name} to DRM Bot! 🎉\n\n"
@@ -501,7 +472,6 @@ async def start(bot, m: Message):
         f"<blockquote>💵 Monthly Plan: 800</blockquote>\n\n"
         f"If you want to buy membership of the bot, feel free to contact the Bot Admin.\n", disable_web_page_preview=True, reply_markup=keyboard
     )
-
 @bot.on_message(filters.command(["upgrade"]))
 async def id_command(client, message: Message):
     chat_id = message.chat.id
