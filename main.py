@@ -108,8 +108,8 @@ BUTTONSCONTACT = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact"
 keyboard = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton(text="🛠️ Help", url="https://t.me/+3NYwNGZl"),
-            InlineKeyboardButton(text="🛠️ Repo", url="https://github.caisaect"),
+            InlineKeyboardButton(text="🛠️ Help", url="https://t.me/Driven_soulbot"),
+            InlineKeyboardButton(text="🛠️ Repo", url="https://t.me/Driven_soulbot"),
         ],
     ]
 )
@@ -476,7 +476,7 @@ async def start(bot, m: Message):
             f"🌟 Welcome {m.from_user.first_name}! 🌟\n\n" +
             f"Great! You are a premium member!\n"
             f"Use Command : /help to get started 🌟\n\n"
-            f"If you face any problem contact -  [PATIL](https://t.me/saini_contact_bot)\n", disable_web_page_preview=True, reply_markup=BUTTONSCONTACT
+            f"If you face any problem contact -  [PATIL](https://t.me/Driven_soulbot)\n", disable_web_page_preview=True, reply_markup=BUTTONSCONTACT
         )
     else:
         await asyncio.sleep(2)
