@@ -795,8 +795,8 @@ async def txt_handler(bot: Client, m: Message):
      
 
             elif "classplusapp.com/drm/" in url:
-                # url = f"https://drmapijion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
-                url = f"https://drmjion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
+                url = f"https://sainibotsdrm.vercel.app/api?url={url}&token={cptoken}&auth=4443683167"
+              #  url = f"https://drmjion-botupdatevip.vercel.app/api?url={url}&token={cptoken}"
 
                 result = helper.get_mps_and_keys1(url)
                 if result is None:
