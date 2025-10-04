@@ -94,7 +94,7 @@ async def handle_all_tokens_failed(bot, channel_id):
     )
 
     while True:  # infinite wait until owner sends token
-        response = await bot.wait_for("message")  # waiting time none
+        response = await bot.listen(channel_id)  # waiting time none
         new_token = response.text.strip()
 
         if new_token.lower() == "send stop":
