@@ -86,6 +86,30 @@ def get_current_token():
     return current_token
 
 
+# ================================================================
+async def handle_all_tokens_failed(bot, channel_id):
+    await bot.send_message(
+        channel_id,
+        "❌ All tokens failed.\n\n➡️ Please reply with your working token to continue the process.\n➡️ Reply `send stop` to stop the bot."
+    )
+
+    while True:  # infinite wait until owner sends token
+        response = await bot.wait_for("message")  # waiting time none
+        new_token = response.text.strip()
+
+        if new_token.lower() == "send stop":
+            await bot.send_message(channel_id, "🛑 Bot stopped by owner.")
+            return "STOP"
+
+        if new_token:  # assume any non-empty message is the new token
+            token_list.append(new_token)
+            with open(TOKEN_LIST_PATH, "a") as f:
+                f.write(new_token + "\n")
+
+            await bot.send_message(channel_id, f"✅ New token added. Resuming process...")
+            return "NEW_TOKEN", new_token
+
+
 # ================================================================ #
 # Initialize the bot
 bot = Client(
@@ -809,17 +833,29 @@ async def txt_handler(bot: Client, m: Message):
                     selected_token = get_current_token()
 
                     if not selected_token:
-                        await bot.send_message(channel_id, "❌ All tokens exhausted. Stopping.")
-                        break
+                        # All tokens failed, wait for owner to send new token
+                        status = await handle_all_tokens_failed(bot, channel_id)
+
+                        if status == "STOP":
+                            break  # bot stop
+
+                        elif isinstance(status, tuple) and status[0] == "NEW_TOKEN":
+                            new_token = status[1]
+                            selected_token = new_token
+                            cwtoken = new_token
+                            cptoken = new_token
+                            pwtoken = new_token
+
+                            i -= 2  # retry previous link
+                            continue
 
                     # Replace tokens with the new one
                     cwtoken = selected_token
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 2  # retry the previous link
+                    i -= 2
                     continue
-
                 mpd, keys = result
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
