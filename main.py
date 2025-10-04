@@ -846,16 +846,16 @@ async def txt_handler(bot: Client, m: Message):
                             cptoken = new_token
                             pwtoken = new_token
 
-                            i -= 2  # retry previous link
-                            continue
+                            was_token_retry = True  # flag set so we skip "✅ Completed" at end if stopped
+                            continue                # retry same link
 
                     # Replace tokens with the new one
                     cwtoken = selected_token
                     cptoken = selected_token
                     pwtoken = selected_token
 
-                    i -= 2
-                    continue
+                    was_token_retry = True  # flag set so we skip "✅ Completed" at end if stopped
+                    continue                # retry same link
                 mpd, keys = result
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
